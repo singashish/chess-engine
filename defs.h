@@ -51,6 +51,7 @@ typedef unsigned long long uint64;
 
 #define NAME "Chess Engine"
 #define BOARD_SIZE 120
+#define MAX_MOVES 2048
 
 enum { EMPTY, W_PAWN, W_KNIGHT, W_BISHOP, W_ROOK, W_QUEEN, W_KING,
        B_PAWN, B_KNIGHT, B_BISHOP, B_ROOK, B_QUEEN, B_KING };
@@ -58,6 +59,15 @@ enum { FILE_A, FILE_B, FILE_C, FILE_D, FILE_E, FILE_F, FILE_G, FILE_H, FILE_NONE
 enum { RANK_1, RANK_2, RANK_3, RANK_4, RANK_5, RANK_6, RANK_7, RANK_8, RANK_NONE };
 
 enum { WHITE, BLACK, BOTH };
+
+typedef struct {
+    int move;
+    int castle_permits;
+    int en_passant;
+    int fifty_move;
+    int pos_key;
+} Undo;
+
 
 enum {
     A1 = 21, B1, C1, D1, E1, F1, G1, H1,
@@ -71,6 +81,27 @@ enum {
     NO_SQUARE = 99
 };
 
-enum { FALSE, TRUE };
+enum { FALSE = 0, TRUE = 1 };
+
+enum { WHITE_KING_CASTLE = 1, WHITE_QUEEN_CASTLE = 2,
+       BLACK_KING_CASTLE = 4, BLACK_QUEEN_CASTLE = 8 };
+
+typedef struct {
+    int pieces[BOARD_SIZE];
+    uint64 pawns[3];
+    int king_square[2];
+    int side;
+    int en_passant;
+    int fifty_move;
+    int play;
+    int history_play;
+    int castle_permits;
+    uint64 pos_key;
+    int piece_num[13];
+    int big_piece[3];
+    int major_piece[3];
+    int minor_piece[3];
+    Undo history[MAX_MOVES];
+} Board;
 
 #endif // DEFS_H
